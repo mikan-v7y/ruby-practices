@@ -19,22 +19,18 @@ opt.on('-y YEAR'){|y|
 
 opt.parse!(ARGV)
 
-if options[:month] == nil
-    options[:month] = Date.today.month
-end
+options[:month] = Date.today.month if options[:month].nil?
 
 if options[:year] == nil
     options[:year] = Date.today.year
 end
 
 if options[:month] < 1 || options[:month] > 12
-    puts "Month can be entered from 1 to 12"
-    abort
+    abort "Month can be entered from 1 to 12"
 end
 
 if options[:year] < 1970 || options[:year] > 2100
-    puts "Year can be entered from 1970 to 2100"
-    abort
+    abort "Year can be entered from 1970 to 2100"
 end
 
 CALENDAR_WIDTH = 20
