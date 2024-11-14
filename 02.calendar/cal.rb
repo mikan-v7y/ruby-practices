@@ -6,6 +6,9 @@ require 'date'
 # optparserクラスを使うために宣言
 require 'optparse'
 
+CALENDAR_WIDTH = 20
+WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"]
+
 options = {}
 opt = OptionParser.new
 
@@ -21,9 +24,7 @@ opt.parse!(ARGV)
 
 options[:month] = Date.today.month if options[:month].nil?
 
-if options[:year] == nil
-    options[:year] = Date.today.year
-end
+options[:year] = Date.today.year if options[:year].nil?
 
 if options[:month] < 1 || options[:month] > 12
     abort "Month can be entered from 1 to 12"
@@ -33,10 +34,8 @@ if options[:year] < 1970 || options[:year] > 2100
     abort "Year can be entered from 1970 to 2100"
 end
 
-CALENDAR_WIDTH = 20
 puts "#{options[:month]}月 #{options[:year]}".center(CALENDAR_WIDTH)
 
-WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"]
 puts WEEKDAYS.join(" ")
 
 first_day = Date.new(options[:year], options[:month], 1)
