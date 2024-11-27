@@ -23,19 +23,20 @@ point = 0
 frames.each_with_index do |frame, i|
   point += frame.sum
   next if frame.sum != 10 || i >= 9
+  # 次のフレーム、次の次のフレームを定義
   next_frame = frames[i + 1]
   next_next_frame = frames[i + 2]
 
   if frame[0] == 10
-    point += next_frame[0] if next_frame
+    point += next_frame[0]
     if next_frame && next_frame[0] == 10
       point += next_next_frame[0] if next_next_frame
-    elsif next_frame && next_frame[1]
+    else next_frame && next_frame[1]
       point += next_frame[1]
     end
     next
-  elsif frame.sum == 10
-    point += next_frame[0] if next_frame
+  else frame.sum == 10
+    point += next_frame[0]
     next
   end
 end
