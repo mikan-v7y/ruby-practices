@@ -21,23 +21,22 @@ shots.each_slice(2) do |s|
   frames << s
 end
 
+
 point = 0
 frames.each_with_index do |frame, i|
   point += frame.sum
-  next if i >= 9
+  next if frame.sum != 10 || i >= 9
 
   next_frame = frames[i + 1]
   next_next_frame = frames[i + 2]
 
-  if frame.sum == 10
-    point += next_frame[0]
-    next if frame[0] != 10
+  point += next_frame[0]
+  next if frame[0] != 10
 
-    point += next_frame[1]
-    next if next_frame[0] != 10
+  point += next_frame[1]
+  next if next_frame[0] != 10 || next_next_frame == nil
 
-    point += next_next_frame[0]
-  end
+  point += next_next_frame[0]
 end
 
 p point
