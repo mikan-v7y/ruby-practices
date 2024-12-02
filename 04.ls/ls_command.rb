@@ -15,7 +15,7 @@ def files_display_arrangement(files)
 
   files_number = files.size
   quotient, remainder = files_number.divmod(COLUMN)
-  rows_number = remainder.zero? ? quotinet : quotient + 1
+  rows_number = remainder.zero? ? quotient : quotient + 1
 
   ls_format_files = files_dimensional_array(files_after_arrangement, rows_number)
   show_file(ls_format_files)
