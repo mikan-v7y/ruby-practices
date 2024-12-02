@@ -4,7 +4,7 @@ COLUMN_GAP = 1
 
 COLUMN = 3
 
-def main_logic
+def logic
   files = Dir.glob('*')
   files_display_arrangement(files)
 end
@@ -36,4 +36,4 @@ def show_file(ls_format_files)
   end
 end
 
-main_logic
+logic
