@@ -1,17 +1,38 @@
 # frozen_string_literal: true
 
+require 'optparse'
+
 COLUMN_GAP = 1
 
 COLUMN = 3
 
 def main
-  files = Dir.glob('*')
+  options = define_option
+  files = fetch_file(options)
   files_display_arrangement(files)
 end
 
+def define_option
+  opt = OptionParser.new
+
+  options = {}
+
+  opt.on('-a') do
+    options[:a] = true
+  end
+
+  opt.parse!(ARGV)
+
+  options
+end
+
+def fetch_file(options)
+  options[:a] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
+end
+
 def files_display_arrangement(files)
-  max_file = files.map(&:size).max
-  files_after_arrangement = files.map { |file| file.ljust(max_file + COLUMN_GAP) }
+  max_filename_length = files.map(&:size).max
+  files_after_arrangement = files.map { |file| file.ljust(max_filename_length + COLUMN_GAP) }
   ls_format_files = files_dimensional_array(files_after_arrangement)
   show_file(ls_format_files)
 end
