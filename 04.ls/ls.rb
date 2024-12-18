@@ -21,6 +21,10 @@ def define_option
     options[:a] = true
   end
 
+  opt.on('-r') do
+    options[:r] = true
+  end
+
   opt.parse!(ARGV)
 
   options
@@ -28,6 +32,7 @@ end
 
 def fetch_file(options)
   options[:a] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
+  options[:r] ? Dir.glob('*').reverse : Dir.glob('*')
 end
 
 def files_display_arrangement(files)
