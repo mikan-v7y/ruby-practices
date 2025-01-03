@@ -63,11 +63,8 @@ end
 def show_file_informations(files)
   files.each do |file|
     fs = File.stat(file)
-    file_type = fs.ftype
-    mode_number = fs.mode.to_s(8)
-
-    print FILE_TYPE_LIST.fetch(file_type)
-    print_filemode(mode_number)
+    print FILE_TYPE_LIST.fetch(fs.ftype)
+    print_filemode(fs)
     print " #{fs.nlink.to_s.rjust(3)}"
     print " #{Etc.getpwuid(fs.uid).name}"
     print " #{Etc.getgrgid(fs.gid).name}"
@@ -77,10 +74,14 @@ def show_file_informations(files)
   end
 end
 
-def print_filemode(mode_number)
-  owner_permission = mode_number.to_s[-3].to_s
-  group_permission = mode_number.to_s[-2].to_s
-  other_permission = mode_number.to_s[-1].to_s
+# あ
+
+def print_filemode(fs)
+  mode_number = fs.mode.to_s(8)
+
+  owner_permission = mode_number[-3]
+  group_permission = mode_number[-2]
+  other_permission = mode_number[-1]
 
   print FILEMODE_PERMISSION_LIST.fetch(owner_permission)
   print FILEMODE_PERMISSION_LIST.fetch(group_permission)
