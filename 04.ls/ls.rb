@@ -50,8 +50,9 @@ def define_option
 end
 
 def fetch_file(options)
-  options[:a] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
-  options[:r] ? Dir.glob('*').reverse : Dir.glob('*')
+  files = options[:a] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
+  files.reverse! if options[:r]
+  files
 end
 
 def show_file_details(files)
@@ -62,22 +63,20 @@ end
 
 def show_file_informations(files)
   files.each do |file|
-    fs = File.stat(file)
-    print FILE_TYPE_LIST.fetch(fs.ftype)
-    print_filemode(fs)
-    print " #{fs.nlink.to_s.rjust(3)}"
-    print " #{Etc.getpwuid(fs.uid).name}"
-    print " #{Etc.getgrgid(fs.gid).name}"
-    print " #{fs.size.to_s.rjust(5)}"
-    print " #{fs.mtime.strftime('%m %d %H:%M')}"
+    stat = File.stat(file)
+    print FILE_TYPE_LIST.fetch(stat.ftype)
+    print_filemode(stat)
+    print " #{stat.nlink.to_s.rjust(3)}"
+    print " #{Etc.getpwuid(stat.uid).name}"
+    print " #{Etc.getgrgid(stat.gid).name}"
+    print " #{stat.size.to_s.rjust(5)}"
+    print " #{stat.mtime.strftime('%m %d %H:%M')}"
     puts " #{file}"
   end
 end
 
-# あ
-
-def print_filemode(fs)
-  mode_number = fs.mode.to_s(8)
+def print_filemode(stat)
+  mode_number = stat.mode.to_s(8)
 
   owner_permission = mode_number[-3]
   group_permission = mode_number[-2]
