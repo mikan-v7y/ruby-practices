@@ -2,82 +2,96 @@
 
 require 'optparse'
 
-FILE_STATUS_ORIGIN = { line: 0, word: 0, character: 0 }.freeze
-
 def main
-  options = define_option
-  ARGV.empty? ? accept_standard_input(options) : load_file_content(options)
+  options, file_names = parse_options
+  file_names.empty? ? show_stdin_data(options) : show_files_data(options)
 end
 
-def define_option
+def parse_options
   opt = OptionParser.new
 
   options = {}
 
-  opt.on('-l') do
+  opt.on('-l') { options[:l] = true }
+  opt.on('-w') { options[:w] = true }
+  opt.on('-c') { options[:c] = true }
+  opt.parse!(ARGV)
+
+  if options.empty?
     options[:l] = true
-  end
-
-  opt.on('-w') do
     options[:w] = true
-  end
-
-  opt.on('-c') do
     options[:c] = true
   end
 
-  opt.parse!(ARGV)
+  file_names = ARGV
 
-  options
+  [options, file_names]
 end
 
-def accept_standard_input(options)
-  file_name = nil
+def show_stdin_data(options)
   text = $stdin.read
-  count_lwc_from_text(options, file_name, text)
+  lwc_data = count_lwc_from_file_text(options, text)
+  lwc_data_format = arrange_file_data_lwc(lwc_data)
+  puts lwc_data_format
 end
 
-def load_file_content(options)
-  file_name = ARGV[0]
-  text = File.read(file_name)
-  count_lwc_from_text(options, file_name, text)
-end
+def show_files_data(options)
+  total_data = { line: 0, word: 0, character: 0 }
 
-def count_lwc_from_text(options, file_name, text)
-  lines_number = options[:l] || options.empty? ? text.lines.size : 0
-  words_number = options[:w] || options.empty? ? text.split(/\s+/).size : 0
-  characters_number = options[:c] || options.empty? ? text.bytesize : 0
+  ARGV.each do |file_name|
+    text = File.read(file_name)
+    lwc_data = count_lwc_from_file_text(options, text)
+    lwc_data_format = arrange_file_data_lwc(lwc_data)
+    lwc_data_with_file = add_file_name(lwc_data_format, file_name)
+    puts lwc_data_with_file
 
-  file_status = FILE_STATUS_ORIGIN.dup
-
-  file_status[:line] += lines_number
-  file_status[:word] += words_number
-  file_status[:character] += characters_number
-
-  display_text = arrange_display_text(options, file_status)
-  print_display_text(display_text, file_name)
-end
-
-def arrange_display_text(options, file_status)
-  display_text = []
-
-  if options.empty?
-    display_text = [file_status[:line].to_s.rjust(8), file_status[:word].to_s.rjust(7), file_status[:character].to_s.rjust(7)]
-  else
-    display_text << file_status[:line].to_s.rjust(8) if options[:l]
-    display_text << file_status[:word].to_s.rjust(8) if options[:w]
-    display_text << file_status[:character].to_s.rjust(8) if options[:c]
+    total_data[:line] += lwc_data[:line]
+    total_data[:word] += lwc_data[:word]
+    total_data[:character] += lwc_data[:character]
   end
-  display_text.join(' ')
+
+  return unless ARGV.size > 1
+
+  total_data_format = count_total_data(total_data)
+  puts "#{total_data_format} total"
 end
 
-def print_display_text(display_text, file_name)
-  if file_name.nil?
-    puts display_text
-  else
-    file_name = file_name.rjust(6)
-    puts "#{display_text} #{file_name}"
-  end
+def count_lwc_from_file_text(options, text)
+  lwc_data = { line: 0, word: 0, character: 0 }
+
+  line_number = options[:l] ? text.lines.size : 0
+  word_number = options[:w] ? text.split(/\s+/).size : 0
+  character_number = options[:c] ? text.bytesize : 0
+
+  lwc_data[:line] += line_number
+  lwc_data[:word] += word_number
+  lwc_data[:character] += character_number
+
+  lwc_data
+end
+
+def arrange_file_data_lwc(lwc_data)
+  lwc_data_format = []
+
+  lwc_data_format << lwc_data[:line].to_s.rjust(8) unless lwc_data[:line].zero?
+  lwc_data_format << lwc_data[:word].to_s.rjust(8) unless lwc_data[:word].zero?
+  lwc_data_format << lwc_data[:character].to_s.rjust(8) unless lwc_data[:character].zero?
+
+  lwc_data_format.join(' ')
+end
+
+def add_file_name(lwc_data_format, file_name)
+  lwc_data_format << " #{file_name}"
+end
+
+def count_total_data(total_data)
+  total_data_format = []
+
+  total_data_format << total_data[:line].to_s.rjust(8) unless total_data[:line].zero?
+  total_data_format << total_data[:word].to_s.rjust(8) unless total_data[:word].zero?
+  total_data_format << total_data[:character].to_s.rjust(8) unless total_data[:character].zero?
+
+  total_data_format.join(' ')
 end
 
 main
