@@ -30,8 +30,8 @@ end
 
 def show_stdin_data(options)
   text = $stdin.read
-  lwc_data = count_lwc_from_file_text(options, text)
-  lwc_data_format = arrange_file_data_lwc(lwc_data)
+  lwc_data = count_lwc_from_text(options, text)
+  lwc_data_format = arrange_lwc_data(lwc_data)
   puts lwc_data_format
 end
 
@@ -40,8 +40,8 @@ def show_files_data(options)
 
   ARGV.each do |file_name|
     text = File.read(file_name)
-    lwc_data = count_lwc_from_file_text(options, text)
-    lwc_data_format = arrange_file_data_lwc(lwc_data)
+    lwc_data = count_lwc_from_text(options, text)
+    lwc_data_format = arrange_lwc_data(lwc_data)
     lwc_data_with_file = add_file_name(lwc_data_format, file_name)
     puts lwc_data_with_file
 
@@ -56,7 +56,7 @@ def show_files_data(options)
   puts "#{total_data_format} total"
 end
 
-def count_lwc_from_file_text(options, text)
+def count_lwc_from_text(options, text)
   lwc_data = { line: 0, word: 0, character: 0 }
 
   line_number = options[:l] ? text.lines.size : 0
@@ -70,7 +70,7 @@ def count_lwc_from_file_text(options, text)
   lwc_data
 end
 
-def arrange_file_data_lwc(lwc_data)
+def arrange_lwc_data(lwc_data)
   lwc_data_format = []
 
   lwc_data_format << lwc_data[:line].to_s.rjust(8) unless lwc_data[:line].zero?
