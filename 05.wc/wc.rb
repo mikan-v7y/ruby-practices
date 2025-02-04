@@ -4,7 +4,8 @@ require 'optparse'
 
 def main
   options, file_names = parse_options
-  file_names.empty? ? show_stdin_data(options) : show_files_data(options)
+  texts = fetch_text_for_count_wc(file_names)
+  show_wc_stats(options, file_names, texts)
 end
 
 def parse_options
@@ -15,6 +16,7 @@ def parse_options
   opt.on('-l') { options[:l] = true }
   opt.on('-w') { options[:w] = true }
   opt.on('-c') { options[:c] = true }
+
   opt.parse!(ARGV)
 
   if options.empty?
@@ -28,70 +30,75 @@ def parse_options
   [options, file_names]
 end
 
-def show_stdin_data(options)
-  text = $stdin.read
-  lwc_data = count_lwc_from_text(options, text)
-  lwc_data_format = arrange_lwc_data(lwc_data)
-  puts lwc_data_format
+def fetch_text_for_count_wc(file_names)
+  texts = []
+
+  if file_names.empty?
+    texts << $stdin.read
+  else
+    file_names.each do |file_name|
+      texts << File.read(file_name)
+    end
+  end
+  texts
 end
 
-def show_files_data(options)
-  total_data = { line: 0, word: 0, character: 0 }
+def show_wc_stats(options, file_names, texts)
+  total_wc_data = { line: 0, word: 0, character: 0 }
 
-  ARGV.each do |file_name|
-    text = File.read(file_name)
-    lwc_data = count_lwc_from_text(options, text)
-    lwc_data_format = arrange_lwc_data(lwc_data)
-    lwc_data_with_file = add_file_name(lwc_data_format, file_name)
-    puts lwc_data_with_file
+  texts.each_with_index do |text, index|
+    wc_data = caluculate_wc_from_text(options, text)
+    wc_format = create_wc_format(wc_data)
 
-    total_data[:line] += lwc_data[:line]
-    total_data[:word] += lwc_data[:word]
-    total_data[:character] += lwc_data[:character]
+    file_name = file_names.any? ? file_names[index] : ' '
+    puts "#{wc_format} #{file_name}"
+
+    count_total_wc(total_wc_data, wc_data)
   end
 
-  return unless ARGV.size > 1
+  return if file_names.size < 2
 
-  total_data_format = count_total_data(total_data)
-  puts "#{total_data_format} total"
+  show_total_wc(total_wc_data)
 end
 
-def count_lwc_from_text(options, text)
-  lwc_data = { line: 0, word: 0, character: 0 }
+def caluculate_wc_from_text(options, text)
+  wc_data = { line: 0, word: 0, character: 0 }
 
-  line_number = options[:l] ? text.lines.size : 0
-  word_number = options[:w] ? text.split(/\s+/).size : 0
-  character_number = options[:c] ? text.bytesize : 0
+  wc_data[:line] += options[:l] ? text.lines.size : 0
+  wc_data[:word] += options[:w] ? text.split(/\s+/).size : 0
+  wc_data[:character] += options[:c] ? text.bytesize : 0
 
-  lwc_data[:line] += line_number
-  lwc_data[:word] += word_number
-  lwc_data[:character] += character_number
-
-  lwc_data
+  wc_data
 end
 
-def arrange_lwc_data(lwc_data)
-  lwc_data_format = []
+def create_wc_format(wc_data)
+  wc = []
 
-  lwc_data_format << lwc_data[:line].to_s.rjust(8) unless lwc_data[:line].zero?
-  lwc_data_format << lwc_data[:word].to_s.rjust(8) unless lwc_data[:word].zero?
-  lwc_data_format << lwc_data[:character].to_s.rjust(8) unless lwc_data[:character].zero?
+  wc << wc_data[:line] if wc_data[:line] >= 1
+  wc << wc_data[:word] if wc_data[:word] >= 1
+  wc << wc_data[:character] if wc_data[:character] >= 1
 
-  lwc_data_format.join(' ')
+  wc_format = wc.map { |wc_value| wc_value.to_s.rjust(8) }
+
+  wc_format.join(' ')
 end
 
-def add_file_name(lwc_data_format, file_name)
-  lwc_data_format << " #{file_name}"
+def count_total_wc(total_wc_data, wc_data)
+  wc_data.each do |key, wc_data_value|
+    total_wc_data[key] += wc_data_value
+  end
 end
 
-def count_total_data(total_data)
-  total_data_format = []
+def show_total_wc(total_wc_data)
+  total_wc = []
 
-  total_data_format << total_data[:line].to_s.rjust(8) unless total_data[:line].zero?
-  total_data_format << total_data[:word].to_s.rjust(8) unless total_data[:word].zero?
-  total_data_format << total_data[:character].to_s.rjust(8) unless total_data[:character].zero?
+  total_wc << total_wc_data[:line] if total_wc_data[:line] >= 1
+  total_wc << total_wc_data[:word] if total_wc_data[:word] >= 1
+  total_wc << total_wc_data[:character] if total_wc_data[:character] >= 1
 
-  total_data_format.join(' ')
+  total_wc_format = total_wc.map { |total_wc_value| total_wc_value.to_s.rjust(8) }.join(' ')
+
+  puts "#{total_wc_format} total"
 end
 
 main
