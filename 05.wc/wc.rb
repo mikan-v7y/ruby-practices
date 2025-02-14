@@ -31,16 +31,11 @@ def parse_options
 end
 
 def fetch_text_for_count_wc(file_names)
-  texts = []
-
   if file_names.empty?
-    texts << $stdin.read
+      [$stdin.read]
   else
-    file_names.each do |file_name|
-      texts << File.read(file_name)
-    end
+      file_names.map { |file_name| File.read(file_name) }
   end
-  texts
 end
 
 def show_wc_stats(options, file_names, texts)
