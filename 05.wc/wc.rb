@@ -39,61 +39,61 @@ def fetch_text_for_count_wc(file_names)
 end
 
 def show_wc_stats(options, file_names, texts)
-  total_wc_data = { line: 0, word: 0, character: 0 }
+  total_data = { line: 0, word: 0, character: 0 }
 
   texts.each_with_index do |text, index|
-    wc_data = caluculate_wc_from_text(options, text)
-    wc_format = create_wc_format(wc_data)
+    counts = calculate_wc_stats(options, text)
+    grid_format = create_format(counts)
 
     file_name = file_names.any? ? file_names[index] : ' '
-    puts "#{wc_format} #{file_name}"
+    puts "#{grid_format} #{file_name}"
 
-    count_total_wc(total_wc_data, wc_data)
+    count_total(total_data, counts)
   end
 
   return if file_names.size < 2
 
-  show_total_wc(total_wc_data)
+  show_total(total_data)
 end
 
-def caluculate_wc_from_text(options, text)
-  wc_data = { line: 0, word: 0, character: 0 }
+def calculate_wc_stats(options, text)
+  counts = { line: 0, word: 0, character: 0 }
 
-  wc_data[:line] += options[:l] ? text.lines.size : 0
-  wc_data[:word] += options[:w] ? text.split(/\s+/).size : 0
-  wc_data[:character] += options[:c] ? text.bytesize : 0
+  counts[:line] += options[:l] ? text.lines.size : 0
+  counts[:word] += options[:w] ? text.split(/\s+/).size : 0
+  counts[:character] += options[:c] ? text.bytesize : 0
 
-  wc_data
+  counts
 end
 
-def create_wc_format(wc_data)
-  wc = []
+def create_format(counts)
+  format = []
 
-  wc << wc_data[:line] if wc_data[:line] >= 1
-  wc << wc_data[:word] if wc_data[:word] >= 1
-  wc << wc_data[:character] if wc_data[:character] >= 1
+  format << counts[:line] if counts[:line] >= 1
+  format << counts[:word] if counts[:word] >= 1
+  format << counts[:character] if counts[:character] >= 1
 
-  wc_format = wc.map { |wc_value| wc_value.to_s.rjust(8) }
+  grid_format = format.map { |wc_value| wc_value.to_s.rjust(8) }
 
-  wc_format.join(' ')
+  grid_format.join(' ')
 end
 
-def count_total_wc(total_wc_data, wc_data)
-  wc_data.each do |key, wc_data_value|
-    total_wc_data[key] += wc_data_value
+def count_total(total_data, counts)
+  counts.each do |key, wc_data_value|
+    total_data[key] += wc_data_value
   end
 end
 
-def show_total_wc(total_wc_data)
-  total_wc = []
+def show_total(total_data)
+  total = []
 
-  total_wc << total_wc_data[:line] if total_wc_data[:line] >= 1
-  total_wc << total_wc_data[:word] if total_wc_data[:word] >= 1
-  total_wc << total_wc_data[:character] if total_wc_data[:character] >= 1
+  total << total_data[:line] if total_data[:line] >= 1
+  total << total_data[:word] if total_data[:word] >= 1
+  total << total_data[:character] if total_data[:character] >= 1
 
-  total_wc_format = total_wc.map { |total_wc_value| total_wc_value.to_s.rjust(8) }.join(' ')
+  total_format = total.map { |total_wc_value| total_wc_value.to_s.rjust(8) }.join(' ')
 
-  puts "#{total_wc_format} total"
+  puts "#{total_format} total"
 end
 
 main
