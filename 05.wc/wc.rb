@@ -32,9 +32,9 @@ end
 
 def fetch_text_for_count_wc(file_names)
   if file_names.empty?
-      [$stdin.read]
+    [$stdin.read]
   else
-      file_names.map { |file_name| File.read(file_name) }
+    file_names.map { |file_name| File.read(file_name) }
   end
 end
 
