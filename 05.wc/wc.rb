@@ -4,8 +4,8 @@ require 'optparse'
 
 def main
   options, file_names = parse_options
-  texts = fetch_text_for_count(file_names)
-  show_stats(options, file_names, texts)
+  file_contents = fetch_file_contents(file_names)
+  show_stats(options, file_names, file_contents)
 end
 
 def parse_options
@@ -30,23 +30,33 @@ def parse_options
   [options, file_names]
 end
 
-def fetch_text_for_count(file_names)
+def fetch_file_contents(file_names)
+  files = []
+
   if file_names.empty?
-    [$stdin.read]
+    files << { name: '', content: $stdin.read }
   else
-    file_names.map { |file_name| File.read(file_name) }
+    file_names.each do |file_name|
+      file = {}
+      file[:name] = file_name
+      file[:content] = File.read(file_name)
+      files << file
+    end
   end
+  files
 end
 
-def show_stats(options, file_names, texts)
+def show_stats(options, file_names, file_contents)
   total_data = { line: 0, word: 0, character: 0 }
 
-  texts.each_with_index do |text, index|
-    counts = calculate_stats(options, text)
+  file_contents.each do |file|
+    name = file[:name]
+    content = file[:content]
+
+    counts = calculate_stats(options, content)
     grid_format = format(counts)
 
-    file_name = file_names.any? ? file_names[index] : ' '
-    puts "#{grid_format} #{file_name}"
+    puts "#{grid_format} #{name}"
 
     count_total(total_data, counts)
   end
@@ -56,12 +66,12 @@ def show_stats(options, file_names, texts)
   show_total(total_data)
 end
 
-def calculate_stats(options, text)
+def calculate_stats(options, content)
   counts = { line: 0, word: 0, character: 0 }
 
-  counts[:line] += options[:l] ? text.lines.size : 0
-  counts[:word] += options[:w] ? text.split(/\s+/).size : 0
-  counts[:character] += options[:c] ? text.bytesize : 0
+  counts[:line] += options[:l] ? content.lines.size : 0
+  counts[:word] += options[:w] ? content.split(/\s+/).size : 0
+  counts[:character] += options[:c] ? content.bytesize : 0
 
   counts
 end
