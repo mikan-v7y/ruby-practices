@@ -43,7 +43,7 @@ def show_stats(options, file_names, texts)
 
   texts.each_with_index do |text, index|
     counts = calculate_stats(options, text)
-    grid_format = create_format(counts)
+    grid_format = format(counts)
 
     file_name = file_names.any? ? file_names[index] : ' '
     puts "#{grid_format} #{file_name}"
@@ -66,7 +66,7 @@ def calculate_stats(options, text)
   counts
 end
 
-def create_format(counts)
+def format(counts)
   format = []
 
   format << counts[:line] if counts[:line] >= 1
