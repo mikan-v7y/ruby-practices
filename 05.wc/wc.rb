@@ -67,7 +67,7 @@ def calculate_stats(options, content)
   counts = { line: 0, word: 0, character: 0 }
 
   counts[:line] += options[:l] ? content.lines.size : 0
-  counts[:word] += options[:w] ? content.split(/\s+/).size : 0
+  counts[:word] += options[:w] ? content.strip.split(/\s+/).size : 0
   counts[:character] += options[:c] ? content.bytesize : 0
 
   counts
