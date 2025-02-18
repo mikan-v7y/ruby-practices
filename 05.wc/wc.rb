@@ -44,7 +44,7 @@ def fetch_file_contents(file_names)
 end
 
 def show_stats(options, file_names, file_contents)
-  total_data = { line: 0, word: 0, character: 0 }
+  total_counts = { line: 0, word: 0, character: 0 }
 
   file_contents.each do |file|
     name = file[:name]
@@ -55,12 +55,12 @@ def show_stats(options, file_names, file_contents)
 
     puts "#{grid_format} #{name}"
 
-    count_total(total_data, counts)
+    count_total(total_counts, counts)
   end
 
   return if file_names.size < 2
 
-  show_total(total_data)
+  show_total(total_counts)
 end
 
 def calculate_stats(options, content)
@@ -76,31 +76,31 @@ end
 def format(counts)
   format = []
 
-  format << counts[:line] if counts[:line] >= 1
-  format << counts[:word] if counts[:word] >= 1
-  format << counts[:character] if counts[:character] >= 1
+  format << counts[:line] if counts[:line]
+  format << counts[:word] if counts[:word]
+  format << counts[:character] if counts[:character]
 
   grid_format = format.map { |value| value.to_s.rjust(8) }
 
   grid_format.join(' ')
 end
 
-def count_total(total_data, counts)
+def count_total(total_counts, counts)
   counts.each do |key, value|
-    total_data[key] += value
+    total_counts[key] += value
   end
 end
 
-def show_total(total_data)
-  total = []
+def show_total(total_counts)
+  total_format = []
 
-  total << total_data[:line] if total_data[:line] >= 1
-  total << total_data[:word] if total_data[:word] >= 1
-  total << total_data[:character] if total_data[:character] >= 1
+  total_format << total_counts[:line] if total_counts[:line] >= 1
+  total_format << total_counts[:word] if total_counts[:word] >= 1
+  total_format << total_counts[:character] if total_counts[:character] >= 1
 
-  total_format = total.map { |total_value| total_value.to_s.rjust(8) }.join(' ')
+  totals = total_format.map { |total_value| total_value.to_s.rjust(8) }.join(' ')
 
-  puts "#{total_format} total"
+  puts "#{totals} total"
 end
 
 main
