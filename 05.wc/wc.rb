@@ -31,19 +31,16 @@ def parse_options
 end
 
 def fetch_file_contents(file_names)
-  files = []
-
   if file_names.empty?
-    files << { name: '', content: $stdin.read }
+    [{ name: '', content: $stdin.read }]
   else
-    file_names.each do |file_name|
-      file = {}
-      file[:name] = file_name
-      file[:content] = File.read(file_name)
-      files << file
+    file_names.map do |file_name|
+      {
+        name: file_name,
+        content: File.read(file_name)
+      }
     end
   end
-  files
 end
 
 def show_stats(options, file_names, file_contents)
