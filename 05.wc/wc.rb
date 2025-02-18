@@ -51,7 +51,7 @@ def show_stats(options, file_names, file_contents)
     content = file[:content]
 
     counts = calculate_stats(options, content)
-    grid_format = format(counts)
+    grid_format = format(options, counts)
 
     puts "#{grid_format} #{name}"
 
@@ -60,25 +60,25 @@ def show_stats(options, file_names, file_contents)
 
   return if file_names.size < 2
 
-  show_total(total_counts)
+  show_total(options, total_counts)
 end
 
 def calculate_stats(options, content)
-  counts = { line: 0, word: 0, character: 0 }
+  counts = {}
 
-  counts[:line] += options[:l] ? content.lines.size : 0
-  counts[:word] += options[:w] ? content.strip.split(/\s+/).size : 0
-  counts[:character] += options[:c] ? content.bytesize : 0
+  counts[:line] = content.lines.size if options[:l]
+  counts[:word] = content.strip.split(/\s+/).size if options[:w]
+  counts[:character] = content.bytesize if options[:c]
 
   counts
 end
 
-def format(counts)
+def format(options, counts)
   format = []
 
-  format << counts[:line] if counts[:line]
-  format << counts[:word] if counts[:word]
-  format << counts[:character] if counts[:character]
+  format << counts[:line] if options[:l]
+  format << counts[:word] if options[:w]
+  format << counts[:character] if options[:c]
 
   grid_format = format.map { |value| value.to_s.rjust(8) }
 
@@ -91,12 +91,12 @@ def count_total(total_counts, counts)
   end
 end
 
-def show_total(total_counts)
+def show_total(options, total_counts)
   total_format = []
 
-  total_format << total_counts[:line] if total_counts[:line] >= 1
-  total_format << total_counts[:word] if total_counts[:word] >= 1
-  total_format << total_counts[:character] if total_counts[:character] >= 1
+  total_format << total_counts[:line] if options[:l]
+  total_format << total_counts[:word] if options[:w]
+  total_format << total_counts[:character] if options[:c]
 
   totals = total_format.map { |total_value| total_value.to_s.rjust(8) }.join(' ')
 
