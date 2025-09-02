@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'shot'
 
 class Frame
@@ -11,7 +13,7 @@ class Frame
 
   # 1フレームの合計点を計算
   def score
-    [@first_shot, @second_shot, @third_shot].compact.sum { |shot| shot.score }
+    [@first_shot, @second_shot, @third_shot].compact.sum(&:score)
   end
 
   def strike?
@@ -24,7 +26,9 @@ class Frame
 
   def bonus_shot_count
     return 2 if strike?
+
     return 1 if spare?
+
     0
   end
 end

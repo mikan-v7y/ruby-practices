@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'frame'
 
 class Game
@@ -15,9 +17,7 @@ class Game
       total += frame.score
 
       # ボーナス点の計算
-      if frame_idx < 9 && frame.bonus_shot_count > 0
-        total += calculate_bonus_points(frame_idx, frame.bonus_shot_count).map { |shot| shot.score }.sum
-      end
+      total += calculate_bonus_points(frame_idx, frame.bonus_shot_count).map(&:score).sum if frame_idx < 9 && frame.bonus_shot_count.positive?
     end
     total
   end
@@ -33,7 +33,6 @@ class Game
     9.times do
       first_mark = @marks[idx] if @marks[idx]
       second_mark = @marks[idx + 1] if @marks[idx + 1]
-      third_mark = @marks[idx + 2] if @marks[idx + 2]
 
       if first_mark == 'X'
         frames << Frame.new(first_mark)
