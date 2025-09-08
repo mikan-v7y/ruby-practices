@@ -3,8 +3,6 @@
 require_relative 'frame'
 
 class Game
-  attr_reader :frames
-
   def initialize(marks)
     @marks = marks.split(',')
     @frames = build_frames
