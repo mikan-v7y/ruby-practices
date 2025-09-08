@@ -24,25 +24,24 @@ class Game
 
   def build_frames
     frames = []
-    # 現在の投球数を表すインデックス
-    idx = 0
+    marks_idx = 0
 
     # 1~9フレームの処理
     9.times do
-      first_mark = @marks[idx] if @marks[idx]
-      second_mark = @marks[idx + 1] if @marks[idx + 1]
+      first_mark = @marks[marks_idx] if @marks[marks_idx]
+      second_mark = @marks[marks_idx + 1] if @marks[marks_idx + 1]
 
       if first_mark == 'X'
         frames << Frame.new(first_mark)
-        idx += 1
+        marks_idx += 1
       else
         frames << Frame.new(first_mark, second_mark)
-        idx += 2
+        marks_idx += 2
       end
     end
 
     # 10フレームの処理
-    frames << Frame.new(@marks[idx], @marks[idx + 1], @marks[idx + 2])
+    frames << Frame.new(@marks[marks_idx], @marks[marks_idx + 1], @marks[marks_idx + 2])
     frames
   end
 
