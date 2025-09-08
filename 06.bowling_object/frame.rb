@@ -13,7 +13,6 @@ class Frame
     @third_shot = Shot.new(third_mark) if third_mark
   end
 
-  # 1フレームの合計点を計算
   def score
     [@first_shot, @second_shot, @third_shot].compact.sum(&:score)
   end

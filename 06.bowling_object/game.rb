@@ -26,7 +26,6 @@ class Game
     frames = []
     marks_idx = 0
 
-    # 1~9フレームの処理
     9.times do
       first_mark = @marks[marks_idx] if @marks[marks_idx]
       second_mark = @marks[marks_idx + 1] if @marks[marks_idx + 1]
@@ -40,17 +39,13 @@ class Game
       end
     end
 
-    # 10フレームの処理
     frames << Frame.new(@marks[marks_idx], @marks[marks_idx + 1], @marks[marks_idx + 2])
     frames
   end
 
   def calculate_bonus_points(frame_idx, bonus_shot_count)
-    # 次のフレーム以降の、全てのFrameオブジェクトを取得。
     @frames[(frame_idx + 1)..]
-      # FrameオブジェクトからShotクラスのオブジェクトを取得し、点数の文字列が格納された配列を作成。
       .map { |frame| [frame.first_shot, frame.second_shot, frame.third_shot].compact }.flatten
-      # 配列の先頭から、bonus_shot_count数分の点数の文字列を取得。
       .first(bonus_shot_count)
   end
 end
