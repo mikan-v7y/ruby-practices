@@ -3,6 +3,8 @@
 require_relative 'shot'
 
 class Frame
+  MAX_PINS_PER_FRAME = 10
+
   attr_reader :first_shot, :second_shot, :third_shot
 
   def initialize(first_mark, second_mark = nil, third_mark = nil)
@@ -17,11 +19,11 @@ class Frame
   end
 
   def strike?
-    @first_shot.score == 10
+    @first_shot.score == MAX_PINS_PER_FRAME
   end
 
   def spare?
-    !strike? && @first_shot.score + @second_shot.score == 10
+    !strike? && @first_shot.score + @second_shot.score == MAX_PINS_PER_FRAME
   end
 
   def bonus_shot_count
