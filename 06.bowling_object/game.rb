@@ -14,7 +14,7 @@ class Game
       # 各フレームのスコアを合計点数に加算（10フレーム目は追加投球込み）
       total += frame.score
 
-      # ボーナス点の計算
+      # 最終フレーム以外のボーナス計算
       total += calculate_bonus_points(frame_idx, frame.bonus_shot_count).map(&:score).sum if frame_idx < 9 && frame.bonus_shot_count.positive?
     end
     total
