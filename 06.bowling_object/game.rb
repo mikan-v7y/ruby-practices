@@ -11,7 +11,7 @@ class Game
   def total_score
     total = 0
     @frames.each_with_index do |frame, frame_idx|
-      # 素点の計算
+      # 各フレームのスコアを合計点数に加算（10フレーム目は追加投球込み）
       total += frame.score
 
       # ボーナス点の計算
