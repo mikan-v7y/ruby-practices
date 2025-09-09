@@ -1,0 +1,45 @@
+# frozen_string_literal: true
+
+require_relative 'shot'
+
+class Frame
+  MAX_PINS_PER_FRAME = 10
+
+  attr_reader :first_shot, :second_shot, :third_shot
+
+  def initialize(first_mark, second_mark = nil, third_mark = nil)
+    @first_shot = Shot.new(first_mark) if first_mark
+    @second_shot = Shot.new(second_mark) if second_mark
+    @third_shot = Shot.new(third_mark) if third_mark
+  end
+
+  def total_score(bonus_shots)
+    raw_score + bonus_score(bonus_shots)
+  end
+
+  def raw_score
+    [@first_shot, @second_shot, @third_shot].compact.sum(&:score)
+  end
+
+  def strike?
+    @first_shot.score == MAX_PINS_PER_FRAME
+  end
+
+  def spare?
+    !strike? && @first_shot.score + @second_shot.score == MAX_PINS_PER_FRAME
+  end
+
+  def bonus_shot_count
+    return 2 if strike?
+    return 1 if spare?
+
+    0
+  end
+
+  def bonus_score(bonus_shots)
+    return bonus_shots.take(2).sum(&:score) if strike?
+    return bonus_shots.first ? bonus_shots.first.score : 0 if spare?
+
+    0
+  end
+end
