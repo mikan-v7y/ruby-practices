@@ -31,15 +31,15 @@ class Frame
 
   def bonus_shot_count
     return 2 if strike?
-
     return 1 if spare?
 
     0
   end
 
   def bonus_score(bonus_shots)
-    return bonus_shots.take(2).sum { |shot| shot.score } if strike?
+    return bonus_shots.take(2).sum(&:score) if strike?
     return bonus_shots.first ? bonus_shots.first.score : 0 if spare?
+
     0
   end
 end

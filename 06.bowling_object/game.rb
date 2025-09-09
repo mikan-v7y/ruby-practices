@@ -11,8 +11,6 @@ class Game
   def total_score
     total = 0
     @frames.each_with_index do |frame, frame_idx|
-
-      # Shotオブジェクトが格納される。[#<Shot:0x00000001066a7708 @mark="X">]
       bonus_shots = get_bonus_shots(frame_idx, frame.bonus_shot_count)
 
       total += frame.total_score(bonus_shots)
