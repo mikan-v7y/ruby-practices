@@ -11,11 +11,11 @@ class Game
   def total_score
     total = 0
     @frames.each_with_index do |frame, frame_idx|
-      # 各フレームのスコアを合計点数に加算（10フレーム目は追加投球込み）
-      total += frame.score
 
-      # 最終フレーム以外のボーナス計算
-      total += calculate_bonus_points(frame_idx, frame.bonus_shot_count).map(&:score).sum if frame_idx < 9 && frame.bonus_shot_count.positive?
+      # Shotオブジェクトが格納される。[#<Shot:0x00000001066a7708 @mark="X">]
+      bonus_shots = get_bonus_shots(frame_idx, frame.bonus_shot_count)
+
+      total += frame.total_score(bonus_shots)
     end
     total
   end
@@ -43,7 +43,7 @@ class Game
     frames
   end
 
-  def calculate_bonus_points(frame_idx, bonus_shot_count)
+  def get_bonus_shots(frame_idx, bonus_shot_count)
     @frames[(frame_idx + 1)..]
       .map { |frame| [frame.first_shot, frame.second_shot, frame.third_shot].compact }.flatten
       .first(bonus_shot_count)

@@ -13,7 +13,11 @@ class Frame
     @third_shot = Shot.new(third_mark) if third_mark
   end
 
-  def score
+  def total_score(bonus_shots)
+    raw_score + bonus_score(bonus_shots)
+  end
+
+  def raw_score
     [@first_shot, @second_shot, @third_shot].compact.sum(&:score)
   end
 
@@ -30,6 +34,12 @@ class Frame
 
     return 1 if spare?
 
+    0
+  end
+
+  def bonus_score(bonus_shots)
+    return bonus_shots.take(2).sum { |shot| shot.score } if strike?
+    return bonus_shots.first ? bonus_shots.first.score : 0 if spare?
     0
   end
 end
