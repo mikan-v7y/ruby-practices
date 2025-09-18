@@ -21,4 +21,11 @@ class LsCommand
       display_files_in_ls_format(files)
     end
   end
+
+  private
+
+  def display_total_blocks(files)
+    total_blocks = files.sum { |file| File.stat(file).blocks }
+    puts "total #{total_blocks}"
+  end
 end
