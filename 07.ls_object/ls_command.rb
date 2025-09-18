@@ -3,6 +3,9 @@
 require 'io/console'
 
 class LsCommand
+  COLUMN_PADDING = 3
+  MINIMUM_COLUMN_NUMBER = 1
+
   def initialize(argv)
     @options = LsOption.new(argv)
   end
