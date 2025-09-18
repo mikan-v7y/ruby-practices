@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'io/console'
+
 class LsCommand
   def initialize(argv)
     @options = LsOption.new(argv)
