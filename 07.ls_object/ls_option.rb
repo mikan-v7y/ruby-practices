@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'optparse'
+
 class LsOption
   def initialize(argv)
     @all = false
