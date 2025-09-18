@@ -30,4 +30,23 @@ class LsCommand
     total_blocks = files.sum { |file| File.stat(file).blocks }
     puts "total #{total_blocks}"
   end
+
+  def display_files_in_ls_format(files)
+    return if files.empty?
+
+    max_file_characters = files.map(&:size).max
+    column_width = max_file_characters + COLUMN_PADDING
+
+    _, terminal_width = IO.console.winsize
+    columns_number = [terminal_width / column_width, MINIMUM_COLUMN_NUMBER].max
+    rows_number = (files.size.to_f / columns_number).ceil
+
+    rows = Array.new(rows_number) { [] }
+    files.each_with_index do |file, i|
+      row_index_to_be_placed = i % rows_number
+      rows[row_index_to_be_placed] << file.ljust(column_width)
+    end
+
+    rows.each { |row| puts row.join }
+  end
 end
