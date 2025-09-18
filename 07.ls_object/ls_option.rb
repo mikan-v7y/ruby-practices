@@ -9,6 +9,18 @@ class LsOption
     parse(argv)
   end
 
+  def all?
+    @all
+  end
+
+  def long?
+    @long
+  end
+
+  def reverse?
+    @reverse
+  end
+
   private
 
   def parse(argv)
