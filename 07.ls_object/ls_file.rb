@@ -27,14 +27,26 @@ class LsFile
 
   def details
     [
-      file_type_and_permissions,
+      permissions,
       @stat.nlink.to_s.rjust(2),
       Etc.getpwuid(@stat.uid).name,
       Etc.getgrgid(@stat.gid).name,
-      @stat.size.to_s.rjust(5),
-      @stat.mtime.strftime('%b %d %H:%M'),
+      size.to_s.rjust(5),
+      mtime.strftime('%b %d %H:%M'),
       @name
     ].join(' ')
+  end
+
+  def permissions
+    file_type_and_permissions
+  end
+
+  def size
+    @stat.size
+  end
+
+  def mtime
+    @stat.mtime
   end
 
   private
