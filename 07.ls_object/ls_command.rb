@@ -33,7 +33,7 @@ class LsCommand
       calculator      = ColumnCalculator.new(files, column_padding: COLUMN_PADDING)
       column_width    = calculator.column_width
       columns_number  = calculator.columns_number
-      DisplayFormatter.new(column_width, columns_number)
+      DisplayFormat.new(column_width, columns_number)
     end
   end
 end

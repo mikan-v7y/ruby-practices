@@ -2,7 +2,7 @@
 
 require 'io/console'
 
-class DisplayFormatter
+class DisplayFormat
   def initialize(column_width, columns_number)
     @column_width   = column_width
     @columns_number = columns_number
