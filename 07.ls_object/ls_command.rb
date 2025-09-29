@@ -29,7 +29,10 @@ class LsCommand
     if @options.long?
       ListFormatter.new
     else
-      ColumnFormatter.new
+      calculator      = ColumnCalculator.new(files, column_padding: COLUMN_PADDING)
+      column_width    = calculator.column_width
+      columns_number  = calculator.columns_number
+      ColumnFormatter.new(column_width, columns_number)
     end
   end
 end
