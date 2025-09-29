@@ -13,7 +13,7 @@ class ColumnCalculator
     max_file_characters + @column_padding
   end
 
-  def calculate
+  def columns_number
     _, terminal_width = IO.console.winsize
     [terminal_width / column_width, MINIMUM_COLUMN_NUMBER].max
   end
