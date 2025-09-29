@@ -4,7 +4,7 @@ require 'io/console'
 require_relative 'ls_file'
 require_relative 'ls_option'
 require_relative 'list_formatter'
-require_relative 'column_formatter'
+require_relative 'display_formatter'
 require_relative 'column_calculator'
 
 class LsCommand
@@ -33,7 +33,7 @@ class LsCommand
       calculator      = ColumnCalculator.new(files, column_padding: COLUMN_PADDING)
       column_width    = calculator.column_width
       columns_number  = calculator.columns_number
-      ColumnFormatter.new(column_width, columns_number)
+      DisplayFormatter.new(column_width, columns_number)
     end
   end
 end
