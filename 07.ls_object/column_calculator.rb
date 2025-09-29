@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ColumnCalculator
+class ColumnCalculation
   MINIMUM_COLUMN_NUMBER = 1
 
   def initialize(files, column_padding: 3)
