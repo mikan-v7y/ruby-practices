@@ -5,6 +5,7 @@ require_relative 'ls_file'
 require_relative 'ls_option'
 require_relative 'list_formatter'
 require_relative 'column_formatter'
+require_relative 'column_calculator'
 
 class LsCommand
   COLUMN_PADDING = 3
@@ -20,12 +21,12 @@ class LsCommand
     files.sort!
     files.reverse! if @options.reverse?
 
-    formatter.display(files)
+    formatter(files).display(files)
   end
 
   private
 
-  def formatter
+  def formatter(files)
     if @options.long?
       ListFormatter.new
     else
