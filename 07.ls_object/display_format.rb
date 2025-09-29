@@ -2,7 +2,7 @@
 
 require 'io/console'
 
-class DisplayFormat
+class ColumnFormat
   def initialize(files, column_width, columns_number)
     @files          = files
     @column_width   = column_width
