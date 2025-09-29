@@ -3,9 +3,9 @@
 require 'io/console'
 require_relative 'ls_file'
 require_relative 'ls_option'
-require_relative 'list_formatter'
-require_relative 'display_formatter'
-require_relative 'column_calculator'
+require_relative 'list_format'
+require_relative 'display_format'
+require_relative 'column_calculation'
 
 class LsCommand
   COLUMN_PADDING = 3
