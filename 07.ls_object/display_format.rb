@@ -3,7 +3,8 @@
 require 'io/console'
 
 class DisplayFormat
-  def initialize(column_width, columns_number)
+  def initialize(files, column_width, columns_number)
+    @files          = files
     @column_width   = column_width
     @columns_number = columns_number
   end
