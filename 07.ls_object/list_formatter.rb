@@ -2,7 +2,7 @@
 
 require_relative 'ls_file'
 
-class ListFormatter
+class ListFormat
   def display(files)
     return if files.empty?
 
