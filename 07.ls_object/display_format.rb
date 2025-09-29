@@ -9,19 +9,19 @@ class DisplayFormat
     @columns_number = columns_number
   end
 
-  def display(files)
-    return if files.empty?
+  def display
+    return if @files.empty?
 
-    rows = build_rows(files, @column_width, @columns_number)
+    rows = build_rows(@column_width, @columns_number)
     print_rows(rows)
   end
 
   private
 
-  def build_rows(files, column_width, columns_number)
-    rows_number = (files.size.to_f / columns_number).ceil
+  def build_rows(column_width, columns_number)
+    rows_number = (@files.size.to_f / columns_number).ceil
     rows = Array.new(rows_number) { [] }
-    files.each_with_index do |file, i|
+    @files.each_with_index do |file, i|
       row_index = i % rows_number
       rows[row_index] << file.ljust(column_width)
     end

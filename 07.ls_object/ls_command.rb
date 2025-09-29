@@ -21,7 +21,7 @@ class LsCommand
     files.sort!
     files.reverse! if @options.reverse?
 
-    formatter(files).display(files)
+    formatter(files).display
   end
 
   private
