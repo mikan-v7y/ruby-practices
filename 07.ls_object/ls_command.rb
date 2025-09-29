@@ -28,7 +28,7 @@ class LsCommand
 
   def formatter(files)
     if @options.long?
-      ListFormat.new
+      ListFormat.new(files)
     else
       calculator      = ColumnCalculation.new(files, column_padding: COLUMN_PADDING)
       column_width    = calculator.column_width
