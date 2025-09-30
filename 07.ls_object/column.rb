@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ColumnCalculation
+class Column
   MINIMUM_COLUMN_NUMBER = 1
 
   def initialize(files, column_padding: 3)
@@ -8,12 +8,12 @@ class ColumnCalculation
     @column_padding = column_padding
   end
 
-  def column_width
+  def width
     max_file_characters = @files.map(&:size).max
     max_file_characters + @column_padding
   end
 
-  def columns_number
+  def number(column_width)
     _, terminal_width = IO.console.winsize
     [terminal_width / column_width, MINIMUM_COLUMN_NUMBER].max
   end

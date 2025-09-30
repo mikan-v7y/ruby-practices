@@ -5,7 +5,7 @@ require_relative 'ls_file'
 require_relative 'ls_option'
 require_relative 'list_format'
 require_relative 'column_format'
-require_relative 'column_calculation'
+require_relative 'column'
 
 class LsCommand
   COLUMN_PADDING = 3
@@ -30,9 +30,9 @@ class LsCommand
     if @options.long?
       ListFormat.new(files)
     else
-      calculator      = ColumnCalculation.new(files, column_padding: COLUMN_PADDING)
-      column_width    = calculator.column_width
-      columns_number  = calculator.columns_number
+      column = Column.new(files, column_padding: COLUMN_PADDING)
+      column_width    = column.width
+      columns_number  = column.number(column_width)
       ColumnFormat.new(files, column_width, columns_number)
     end
   end
