@@ -8,7 +8,7 @@ require_relative 'column_format'
 require_relative 'column'
 
 class LsCommand
-  COLUMN_PADDING = 3
+  COLUMN_PADDING = 8
 
   def initialize(argv)
     @options = LsOption.new(argv)
