@@ -31,7 +31,7 @@ class LsCommand
     else
       column = Column.new(files, column_padding: COLUMN_PADDING)
       column_width    = column.width
-      columns_number  = column.number(column_width)
+      columns_number  = column.number
       ColumnFormat.new(files, column_width, columns_number)
     end
   end
